@@ -60,7 +60,10 @@ function App() {
   return (
     <Container className="my-4">
       <Routes>
-        <Route path="/" element={<NoteList availibleTags={tags} />} />
+        <Route
+          path="/"
+          element={<NoteList notes={notesWithTags} availibleTags={tags} />}
+        />
         <Route
           path="/new"
           element={
