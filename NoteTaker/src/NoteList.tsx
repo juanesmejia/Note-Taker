@@ -87,6 +87,7 @@ export function NoteList({ availibleTags, notes }: NoteListProps) {
           </Col>
         ))}
       </Row>
+      <EditTagsModal />
     </>
   );
 }
