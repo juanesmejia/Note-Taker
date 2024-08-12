@@ -17,6 +17,8 @@ import styles from "./NoteList.module.css";
 type NoteListProps = {
   availibleTags: Tag[];
   notes: SimplifiedNote[];
+  deleteTag: (id: string) => void;
+  updateTag: (id: string, label: string) => void;
 };
 type SimplifiedNote = {
   tags: Tag[];
@@ -24,7 +26,12 @@ type SimplifiedNote = {
   id: string;
 };
 
-export function NoteList({ availibleTags, notes }: NoteListProps) {
+export function NoteList({
+  availibleTags,
+  notes,
+  deleteTag,
+  updateTag,
+}: NoteListProps) {
   const [selectTags, setTags] = useState<Tag[]>([]);
   const [title, setTitle] = useState("");
   const [editTagsIsOpen, setEditTagsIsOpen] = useState(false);
@@ -106,6 +113,8 @@ export function NoteList({ availibleTags, notes }: NoteListProps) {
         availibleTags={availibleTags}
         show={editTagsIsOpen}
         handleClose={() => setEditTagsIsOpen(false)}
+        deleteTag={deleteTag}
+        updateTag={updateTag}
       />
     </>
   );
@@ -146,12 +155,16 @@ type EditTagsModalProps = {
   availibleTags: Tag[];
   show: boolean;
   handleClose: () => void;
+  deleteTag: (id: string) => void;
+  updateTag: (id: string, label: string) => void;
 };
 
 function EditTagsModal({
   availibleTags,
   handleClose,
   show,
+  deleteTag,
+  updateTag,
 }: EditTagsModalProps) {
   return (
     <Modal show={show} onHide={handleClose}>
@@ -164,10 +177,19 @@ function EditTagsModal({
             {availibleTags.map((tag) => (
               <Row key={tag.id}>
                 <Col>
-                  <Form.Control type="text" value={tag.label} />
+                  <Form.Control
+                    type="text"
+                    value={tag.label}
+                    onChange={(e) => updateTag(tag.id, e.target.value)}
+                  />
                 </Col>
                 <Col xs="auto">
-                  <Button variant="outline-danger">&times;</Button>
+                  <Button
+                    onClick={() => deleteTag(tag.id)}
+                    variant="outline-danger"
+                  >
+                    &times;
+                  </Button>
                 </Col>
               </Row>
             ))}
